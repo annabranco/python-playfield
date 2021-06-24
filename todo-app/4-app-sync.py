@@ -30,7 +30,7 @@ def index():
   # value_string = request.data
   # value = json.loads(value_string)
 
-  return render_template('index.html', data=Todos.query.all())
+  return render_template('index-crud.html', data=Todos.query.all())
 
 @app.route('/todos/create', methods=['POST'])
 def create():

@@ -8,28 +8,6 @@
       .hidden {
         display: none;
       }
-      main {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-      }
-      #form {
-        margin: 30px auto;
-      }
-      #todo-area {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        max-width: 70%;
-      }
-      #categories-area {
-        width: 180px;
-        padding-right: 20px;
-        box-sizing: border-box;
-        border-right: 1px solid rgb(62, 99, 221);
-      }
       ul {
         list-style: none;
         padding: 0;
@@ -46,11 +24,8 @@
         cursor: pointer;
         margin-left: 5px;
       }
-      .button-category {
-        color: rgb(184, 189, 207);
-      }
-      .button-category.active {
-        color: rgb(62, 99, 221);
+      div {
+        margin: 30px auto;
       }
     </style>
   </head>
@@ -66,39 +41,24 @@
         <form id='form' autocomplete="off">
           <div>
             <label for="description">Create a todo</label>
-            <input type="text" id="description" name="description" />
-            <input type="hidden" id="category" name="category" value="{{ category }}" />
+            <input type="text" id="description" name="description"/>
             <input type="submit" id="submit" value="create" />
           </div>
         </form>
       </section>
 
-      <div id="error" class='hidden'>Something went wrong</div>
-      <div id="todo-area">
-        <section id="categories-area">
-          <ul id="categories">
-            {% for cat in categories %}
-              <a href="/category/{{ cat.id }}">
-                <li id="category{{ cat.id }}" >
-                  <button class='button-category{{ " active" if cat.id == category }}' data-id="category-{{ cat.id }}">{{ cat.description }}</button>
-                </li>
-              </a>
-            {% endfor %}
-          </ul>
-        </section>
-
-        <section id="items-area">
-          <ul id="todos">
-            {% for todo in todos %}
-            <li id="todo-{{ todo.id }}" >
-              <input class='todo-check' data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked {% endif %}/>
-              {{ todo.description }}
-              <button class='todo-delete' data-id="{{ todo.id }}">&#10006;</button>
-            </li>
-            {% endfor %}
-          </ul>
-        </section>
-      </div>
+      <section class="">
+        <div id="error" class='hidden'>Something went wrong</div>
+        <ul id="todos">
+          {% for d in data %}
+          <li id="todo-{{ d. id  }}" >
+            <input class='todo-check' data-id="{{ d.id }}" type="checkbox" {% if d.completed %} checked {% endif %}/>
+            {{ d.description }}
+            <button class='todo-delete' data-id="{{ d.id }}">&#10006;</button>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
     </main>
     <script>
       const checkCompleteInputs = document.querySelectorAll('.todo-check');
@@ -128,8 +88,7 @@
             fetch('/todos/create', {
               method: 'POST',
               body: JSON.stringify({
-                'description': document.getElementById('description').value,
-                'category': Number(document.getElementById('category').value)
+                'description': document.getElementById('description').value
               }),
               headers: {
                 'Content-Type': 'application/json'

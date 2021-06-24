@@ -39,9 +39,7 @@ def create():
   try:
     print(request.get_json())
     todo = request.get_json()['description']
-    category = request.get_json()['category']
-    print(category)
-    newTodo = Todos(description=todo, category_id=category)
+    newTodo = Todos(description=todo)
     db.session.add(newTodo)
     db.session.commit()
     addedTodo['description'] = newTodo.description
@@ -94,11 +92,11 @@ def delete(id):
 # C[R]UD
 @app.route('/all/')
 def index_all():
-  return render_template('index.html', todos=Todos.query.order_by(Todos.completed, Todos.id.desc()).all())
+  return render_template('index.html', data=Todos.query.order_by(Todos.completed, Todos.id.desc()).all())
 
 @app.route('/category/<cat_id>')
 def index_cat(cat_id):
-  return render_template('index.html', todos=Todos.query.filter_by(category_id=cat_id).order_by(Todos.completed, Todos.id.desc()).all(), categories=Category.query.all(), category=int(cat_id))
+  return render_template('index.html', data=Todos.query.filter_by(category_id=cat_id).order_by(Todos.completed, Todos.id.desc()).all())
 
 
 @app.route('/')
