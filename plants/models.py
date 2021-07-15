@@ -40,6 +40,8 @@ class Plant(db.Model):
         db.session.commit()
 
     def delete(self):
+        print(f'$$$ self: {self}')
+
         db.session.delete(self)
         db.session.commit()
 
